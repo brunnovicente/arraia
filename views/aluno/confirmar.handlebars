@@ -1,0 +1,161 @@
+<style>
+    .hero-section {
+        background: linear-gradient(rgba(0, 255, 0, 0.5), rgba(0, 255, 0, 0.5)), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cpattern id='pattern' width='40' height='40' patternUnits='userSpaceOnUse' patternTransform='rotate(45)'%3E%3Crect width='20' height='20' fill='%230d6efd' fill-opacity='0.2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='%230d6efd'/%3E%3Crect width='100%25' height='100%25' fill='url(%23pattern)'/%3E%3C/svg%3E");
+        color: white;
+        padding: 100px 0;
+        text-align: center;
+    }
+
+    .countdown {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .countdown-item {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .countdown-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .activity-card {
+        height: 100%;
+        transition: transform 0.3s;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .footer {
+        background-color: #343a40;
+        color: white;
+        padding: 30px 0;
+    }
+
+    .section-title {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: #0d6efd;
+    }
+
+    .icon-box {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #0d6efd;
+    }
+</style>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">Arraial do IFMA</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/">Início</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="col-md-6 shadow p-2 mx-auto">
+
+    <h3 class="text-center">Confirmação de Presença no Arraiá</h3>
+
+    <form action="/aluno/presenca" method="post">
+        <fieldset class="border border-1 p-2">
+            <legend class="text-sm-start">DADOS DO ALUNO</legend>
+            <div class="row">
+                <div class="col-sm-7">
+                    <label for="matricula">MATRICULA</label>
+                    <input type="text" name="matricula" id="matricula" class="form-control"  placeholder="Digite sua matrícula como está no SUAP">
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-sm">
+                    <label for="nome">NOME</label>
+                    <input type="text" name="nome" id="nome" class="form-control bg-body-secondary" disabled>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-sm">
+                    <label for="email">E-MAIL CORRETO PARA RECEBER OS INGRESSOS</label>
+                    <input type="text" name="email" id="email" class="form-control" disabled required>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-sm-3">
+                    <label for="convidados">QUANTOS CONVIDADOS?</label>
+                    <select name="convidados" id="convidados" class="form-select" disabled required>
+                        <option value=""></option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-success mt-2" id="botao" disabled>Confirmar Presença</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    //document.getElementById('parte2').style.display = 'none';
+
+    document.getElementById('matricula').addEventListener('blur', async function(){
+        var matricula = this.value.trim()
+        try{
+            const response = await fetch(`/aluno/buscar/${matricula}`)
+            const aluno = await response.json()
+
+            if(aluno){
+
+                document.getElementById('nome').value = aluno.nome
+                document.getElementById('email').value = aluno.email
+
+                if(aluno.status === 1){
+                    alert('Seus ingressos já foram gerados e enviados para '+aluno.email)
+                }else{
+                    document.getElementById('nome').disabled = false
+                    document.getElementById('nome').readOnly = true
+
+                    document.getElementById('email').disabled = false
+                    document.getElementById('convidados').disabled = false
+                    document.getElementById('botao').disabled = false
+                }
+            }else{
+                alert('Aluno não encontrado, verifique sua matrícula!')
+            }
+
+        }catch (err){
+
+        }
+    })
+</script>

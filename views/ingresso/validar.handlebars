@@ -1,0 +1,35 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        text-align: center;
+        padding-top: 100px;
+    }
+
+    .mensagem {
+        display: inline-block;
+        padding: 30px;
+        border-radius: 10px;
+        font-size: 22px;
+        font-weight: bold;
+        color: white;
+    }
+
+    .sucesso {
+        background-color: #4CAF50;
+    }
+
+    .erro {
+        background-color: #F44336;
+    }
+</style>
+
+{{#if (igual status 0)}}
+    <div class="mensagem sucesso">
+        ✅ Ingresso validado com sucesso!
+    </div>
+{{else}}
+    <div class="mensagem erro">
+        ⚠️ Este ingresso já foi validado anteriormente.
+    </div>
+{{/if}}
