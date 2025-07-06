@@ -1,11 +1,30 @@
 import Aluno from '../models/Aluno.js';
 import Ingresso from "../models/Ingresso.js";
-import {Op} from "sequelize";
 import qrcode from "qrcode";
 import comunicador from "../helpers/comunicador.js";
 import puppeteer from "puppeteer";
+import express from 'express';
+const servidor = express();
+import path from "path";
+import { fileURLToPath } from 'url';
+
+//Pasta de Arquivos Estásticos
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+servidor.use(express.static(path.join(__dirname, 'public')));
+
 
 class AlunoController {
+
+    lista = async function (req, res) {
+        const chave = req.params.curso;
+        const alunos = await Aluno.findAll({
+            where:{
+                curso: chave
+            },
+            order: [['nome', 'ASC']]
+        });
+        res.render('aluno/lista', {alunos: alunos, curso: chave})
+    }
 
     confirmar = async function (req, res){
         res.render('aluno/confirmar')
@@ -57,6 +76,53 @@ class AlunoController {
             }
         })
         res.render('aluno/ingresso', {ingressos: ingressos})
+    }
+
+    curso = async function(req, res){
+        const alunos = await Aluno.findAll({})
+
+        for(let i = 0; i < alunos.length; i++){
+            let aluno = alunos[i]
+            let nome_curso = aluno.matricula
+            if(nome_curso.includes('CNTI')){
+                await Aluno.update({
+                    curso: 'TI'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('PIF')){
+                await Aluno.update({
+                    curso: 'PIF'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('ADS')){
+                await Aluno.update({
+                    curso: 'ADS'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('TDS')){
+                await Aluno.update({
+                    curso: 'TDS'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('CNTADM')){
+                await Aluno.update({
+                    curso: 'TADM'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('BAD')){
+                await Aluno.update({
+                    curso: 'BADM'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('AI')){
+                await Aluno.update({
+                    curso: 'TAUT'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('PRO')){
+                await Aluno.update({
+                    curso: 'PROEJA'
+                }, {where: {id: aluno.id}})
+            }else if(nome_curso.includes('INF')){
+                await Aluno.update({
+                    curso: 'TI'
+                }, {where: {id: aluno.id}})
+            }
+        }
+        res.redirect('/')
     }
 
     //API
@@ -179,7 +245,7 @@ async function enviar(destinatario, ingresso){
         </body>
         </html>
     `
-    var imagem = 'ingresso'+ingresso.codigo+'.png'
+    var imagem = 'public/img/ingresso'+ingresso.codigo+'.png'
     await gerarImagem(mensagem, imagem)
     const msg = `
     
@@ -191,7 +257,11 @@ async function enviar(destinatario, ingresso){
 }
 
 async function gerarImagem(conteudoHTML, saida='ingresso.png'){
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({
+        //executablePath: '/usr/bin/chromium-browser', //Para o linux
+        //args: ['--no-sandbox'], //Para o linux
+        headless: 'new'
+    });
     const page = await browser.newPage();
 
     await page.setContent(conteudoHTML, { waitUntil: 'networkidle0' });

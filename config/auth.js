@@ -2,7 +2,7 @@ import passportLocal from 'passport-local';
 const localEstrategy = passportLocal.Strategy
 import bcrypt from 'bcrypt'
 import Usuario from '../models/Usuario.js'
-import Professor from "../models/Professor.js";
+import Membro from '../models/Membro.js'
 
 export default function (passport) {
     passport.use(new localEstrategy({usernameField: "username", passwordField: "password"},
@@ -32,8 +32,7 @@ export default function (passport) {
     passport.deserializeUser(function (id, done) {
         Usuario.findByPk(id, {
             include:{
-                model: Professor,
-                as: 'professor'
+                model: Membro
             }
         }).then((usuario) => {
             done(null, usuario)

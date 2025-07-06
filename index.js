@@ -10,8 +10,8 @@ import { allowInsecurePrototypeAccess} from "@handlebars/allow-prototype-access"
 import session from "express-session";
 import flash from "connect-flash"
 import passport from "passport"
-//import auth from "./config/auth.js";
-//auth(passport)
+import auth from "./config/auth.js";
+auth(passport)
 
 ///////////////////////////////
 //CONFIGURAÇÕES
@@ -64,11 +64,17 @@ servidor.get('/', (req, res) => {
     res.render('principal/index')
 })
 
+import usuario from './routes/usuario.js'
+servidor.use('/usuario', usuario)
+
 import aluno from './routes/aluno.js'
 servidor.use('/aluno', aluno);
 
 import ingresso from './routes/ingresso.js'
 servidor.use('/ingresso', ingresso);
+
+import admin from './routes/admin.js'
+servidor.use('/admin', admin);
 
 servidor.listen(PORTA, function (){
     console.log('Servidor rodando em http://localhost:'+PORTA);
