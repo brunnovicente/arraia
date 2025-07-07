@@ -1,4 +1,5 @@
 import Ingresso  from "../models/Ingresso.js";
+import Aluno from "../models/Aluno.js";
 
 class IngressoController {
 
@@ -25,6 +26,23 @@ class IngressoController {
                 res.render('ingresso/validar', {ingresso: ingresso, status: 0});
             })
         }
+    }
+
+    listar = async function(req, res){
+        const aluno_id = req.params.aluno
+        const aluno = await Aluno.findOne({
+            where:{
+                id: aluno_id
+            }
+        })
+
+        const ingressos = await Ingresso.findAll({
+            where:{
+                alunos_id: aluno.id
+            }
+        })
+
+        res.render('ingresso/listar', {ingressos: ingressos, aluno: aluno})
     }
 
 }

@@ -54,44 +54,41 @@
     </table>
 </div>
 
-
-
 <!-- Modal -->
 <div class="modal fade" id="confirmarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar presença de aluno</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="">
+            <form action="/aluno/presenca" method="post">
             <div class="modal-body">
-                <input type="text" id="id" name="id">
+                <input type="text" id="id" name="id" hidden="hidden">
                     <div class="row">
                         <div class="col">
                             <label for="matricula">MATRÍCULA</label>
-                            <input type="text" name="matricula" id="matricula" class="form-control">
+                            <input type="text" name="matricula" id="matricula" class="form-control bg-body-secondary" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="nome">NOME</label>
-                            <input type="text" name="nome" id="nome" class="form-control">
+                            <input type="text" name="nome" id="nome" class="form-control bg-body-secondary" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="nome">CURSO</label>
-                            <input type="text" name="curso" id="curso" class="form-control">
+                            <input type="text" name="curso" id="curso" class="form-control bg-body-secondary" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="email">E-MAIL</label>
-                            <input type="text" name="email" id="email" class="form-control">
+                            <input type="text" name="email" id="email" class="form-control" required>
                         </div>
                     </div>
-
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-sm btn-success">Salvar</button>
