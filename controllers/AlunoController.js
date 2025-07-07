@@ -49,7 +49,7 @@ class AlunoController {
             })
             //let qtd = parseInt(req.body.convidados)
             //let url = `${req.protocol}://${req.get('host')}/ingresso/validar`
-            for(let i = 0; i < 2; i++){
+            for(let i = 0; i < 3; i++){
                 let codigo = gerarCodigo()
                 let novo = {
                     codigo: codigo,
