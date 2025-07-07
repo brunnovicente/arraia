@@ -24,7 +24,6 @@ const Aluno = banco.sequelize.define('alunos', {
     },
     codigo: {
         type: banco.Sequelize.STRING(100),
-        allowNull: false
     },
     curso:{
         type: banco.Sequelize.STRING(20),

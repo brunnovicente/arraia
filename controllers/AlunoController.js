@@ -129,6 +129,45 @@ class AlunoController {
         res.redirect('/')
     }
 
+    egresso = async function(req, res){
+
+        const aluno = await Aluno.findOne({
+            where: {matricula: req.body.matricula}
+        })
+
+        if(aluno){
+            req.flash('error_msg', 'Ingresso solicitado para o cpf '+aluno.matricula+' e enviado para o e-mail '+aluno.email)
+            res.redirect('/')
+        }else {
+            const novo = {
+                matricula: req.body.matricula,
+                nome: req.body.nome,
+                email: req.body.email,
+                curso: 'EGRESSO',
+                status: 0
+            }
+
+            Aluno.create(novo).then(async function (aluno) {
+
+                let codigo = gerarCodigo()
+                let novo = {
+                    codigo: codigo,
+                    status: 1,
+                    descricao: 'Ingresso 1',
+                    alunos_id: aluno.id,
+                    qrcode: await gerarQRcode(`${req.protocol}://${req.get('host')}/ingresso/validar/${codigo}`)
+                }
+
+                const ingresso = await Ingresso.create(novo)
+                enviar(aluno.email, ingresso)
+
+                req.flash('success_msg', 'Ingresso enviado para o e-mail: '+aluno.email)
+                res.redirect('/')
+            })
+        }
+
+    }
+
     //API
     buscar = async function (req, res){
         const matricula = req.params.matricula;
@@ -141,7 +180,7 @@ class AlunoController {
         res.json(aluno)
     }
 
-}
+}//FIM DA CLASSE
 
 //Funções Extras
 function gerarCodigo (tamanho = 6) {
