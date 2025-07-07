@@ -56,7 +56,7 @@ class AlunoController {
                     status: 0,
                     descricao: 'Ingresso '+(i+1),
                     alunos_id: aluno.id,
-                    qrcode: await gerarQRcode(`${req.protocol}://${req.get('host')}/ingresso/validar/${codigo}`)
+                    qrcode: await gerarQRcode(`https://${req.get('host')}/ingresso/validar/${codigo}`)
                 }
 
                 const ingresso = await Ingresso.create(novo)
@@ -152,10 +152,10 @@ class AlunoController {
                 let codigo = gerarCodigo()
                 let novo = {
                     codigo: codigo,
-                    status: 1,
+                    status: 0,
                     descricao: 'Ingresso 1',
                     alunos_id: aluno.id,
-                    qrcode: await gerarQRcode(`${req.protocol}://${req.get('host')}/ingresso/validar/${codigo}`)
+                    qrcode: await gerarQRcode(`https://${req.get('host')}/ingresso/validar/${codigo}`)
                 }
 
                 const ingresso = await Ingresso.create(novo)
