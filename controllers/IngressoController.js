@@ -4,6 +4,42 @@ import qrcode from "qrcode";
 
 class IngressoController {
 
+    retirar = async function (req, res) {
+        const matricula = req.body.matricula;
+        const email = req.body.email;
+
+        const aluno = await Aluno.findOne({
+            where: {
+                matricula: matricula,
+            }
+        });
+
+        if(!aluno){
+            req.flash('error_msg', 'Matrícula ou CPF não encontrado')
+            res.redirect('/ingresso/retirar');
+        }else{
+            if(aluno.email === email){
+                const ingressos = await Ingresso.findAll({
+                    where: {
+                        alunos_id: aluno.id,
+                    }
+                })
+
+                if(ingressos.length > 0){
+                    res.render('ingresso/imprimir', {ingressos: ingressos, aluno: aluno});
+                }else{
+                    req.flash('error_msg', 'Você ainda não tem ingressos disponíveis! Favor entrar em contato com a comissão do Arraial.')
+                    res.redirect('/');
+                }
+            }else{
+                req.flash('error_msg', 'E-mail não encontrado!')
+                res.redirect('/ingresso/retirar');
+            }
+
+        }
+
+    }
+
     validar = async function (req, res){
         const codigo = req.params.codigo;
 

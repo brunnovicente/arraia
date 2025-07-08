@@ -144,7 +144,7 @@ class AlunoController {
                 nome: req.body.nome,
                 email: req.body.email,
                 curso: 'EGRESSO',
-                status: 0
+                status: 1
             }
 
             Aluno.create(novo).then(async function (aluno) {
