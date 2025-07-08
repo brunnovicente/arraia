@@ -159,7 +159,7 @@ class AlunoController {
                 }
 
                 const ingresso = await Ingresso.create(novo)
-                enviar(aluno.email, ingresso)
+                //enviar(aluno.email, ingresso)
 
                 req.flash('success_msg', 'Ingresso enviado para o e-mail: '+aluno.email)
                 res.redirect('/')
