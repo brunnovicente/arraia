@@ -1,5 +1,6 @@
 import Ingresso  from "../models/Ingresso.js";
 import Aluno from "../models/Aluno.js";
+import qrcode from "qrcode";
 
 class IngressoController {
 
@@ -70,8 +71,52 @@ class IngressoController {
 
             res.render('ingresso/todos', {alunos: alunos, curso: curso})
         }
+    }//Fim de Todos
+
+    adicionar = async function (req, res){
+        const id = req.params.id;
+
+        const ingressos = await Ingresso.findAll({
+            where:{
+                alunos_id: id
+            }
+        })
+        const codigo = gerarCodigo()
+        const novo = {
+            codigo: codigo,
+            qrcode: await gerarQRcode(`https://${req.get('host')}/ingresso/validar/${codigo}`),
+            status: 0,
+            alunos_id: id,
+            descricao: 'Ingresso '+(ingressos.length + 1)
+        }
+
+        Ingresso.create(novo).then(function(ingresso){
+            req.flash('success_msg', 'Ingresso adicionado com sucesso!')
+            res.redirect('/ingresso/listar/' + id)
+        })
+
     }
 
+}
+
+//FUNÇÕES EXTRAS
+function gerarCodigo (tamanho = 6) {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let codigo = '';
+    for (let i = 0; i < tamanho; i++) {
+        const indice = Math.floor(Math.random() * caracteres.length);
+        codigo += caracteres[indice];
+    }
+    return codigo;
+}
+
+async function gerarQRcode (texto){
+    try{
+        const codigo = await qrcode.toDataURL(texto);
+        return codigo
+    }catch (err){
+        console.error(err);
+    }
 }
 
 export default new IngressoController();

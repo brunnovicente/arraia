@@ -55,6 +55,24 @@
         font-size: 12px;
         color: #555;
     }
+
+    @media print {
+        .bloco-aluno {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Quebra de página a cada 2 alunos */
+        .bloco-aluno:nth-of-type(3n) {
+            page-break-after: always;
+            break-after: page;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    }
 </style>
 
 
@@ -64,11 +82,16 @@
         <a href="/aluno/lista/{{aluno.curso}}">Voltar</a>
 
     </div>
-    <p class="text-center"><button class="btn btn-secondary" onclick="window.print()">Imprimir</button></p>
+    <p class="text-center">
+        <button class="btn btn-secondary" onclick="window.print()">Imprimir</button>
+        <button onclick="adicionar({{aluno.id}})" class="btn btn-primary">Adicionar</button>
+
+    </p>
     {{#each ingressos}}
         <div class="ticket mb-3">
-            <h1>Arraial do IFMA</h1>
-            <div class="descricao">{{this.descricao}}</div>
+            <div class="bloco-aluno">
+
+            <h1>Arraial do IFMA - {{this.descricao}}</h1>
             <div class="codigo">Código: {{this.codigo}}</div>
             <div class="qrcode">'
                 <img src="{{this.qrcode}}" alt="QR Code do ingresso" width="180">
@@ -77,6 +100,15 @@
                 IFMA Campus Coelho Neto - Evento Interno<br>
                 Apresente este ingresso na entrada.
             </div>
+            </div>
         </div>
     {{/each}}
 </div>
+
+<script>
+    function adicionar(id){
+        if(confirm('Tem certeza que deseja adicionar um novo ingresso?')){
+            window.location.href=`/ingresso/adicionar/${id}`;
+        }
+    }
+</script>
