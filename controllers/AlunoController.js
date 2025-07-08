@@ -21,7 +21,7 @@ class AlunoController {
             where:{
                 curso: chave
             },
-            order: [['nome', 'ASC']]
+            order: [['status', 'DESC']]
         });
         res.render('aluno/lista', {alunos: alunos, curso: chave})
     }
