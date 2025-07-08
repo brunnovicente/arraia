@@ -42,7 +42,7 @@
                 <td>
                 {{#if (igual status 0)}}
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary btn-confirmar" data-matricula="{{matricula}}" data-nome="{{nome}}" data-id="{{id}}" data-curso="{{curso}}" data-bs-toggle="modal" data-bs-target="#confirmarModal">
+                    <button type="button" class="btn btn-primary btn-confirmar" data-email="{{email}}" data-matricula="{{matricula}}" data-nome="{{nome}}" data-id="{{id}}" data-curso="{{curso}}" data-bs-toggle="modal" data-bs-target="#confirmarModal">
                         Confirmar
                     </button>
                 {{else}}
@@ -110,12 +110,15 @@
                 const matricula = btn.getAttribute('data-matricula')
                 const nome = btn.getAttribute('data-nome')
                 const curso = btn.getAttribute('data-curso')
+                const email = btn.getAttribute('data-email')
+
                 console.log('ID: ', id)
                 console.log('NOME: ', nome)
                 document.getElementById('id').value = id
                 document.getElementById('matricula').value = matricula
                 document.getElementById('nome').value = nome
                 document.getElementById('curso').value = curso
+                document.getElementById('email').value = email
 
             })
         })
