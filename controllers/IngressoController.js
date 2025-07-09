@@ -52,17 +52,27 @@ class IngressoController {
             }
         })
 
-        if(ingresso.status === 1){
-            res.render('ingresso/validar', {ingresso: ingresso, status: 1})
+        if(!ingresso){
+            req.flash('error_msg', 'Ingresso Inválido')
+            res.redirect('/admin')
+
         }else{
-            Ingresso.update(novo,{
-                where: {
-                    codigo: codigo
-                }
-            }).then(function(ingresso){
-                res.render('ingresso/validar', {ingresso: ingresso, status: 0});
-            })
+            if(ingresso.status === 1){
+                res.render('ingresso/validar', {ingresso: ingresso, status: 1})
+            }else{
+                Ingresso.update(novo,{
+                    where: {
+                        codigo: codigo
+                    }
+                }).then(function(ingresso){
+                    res.render('ingresso/validar', {ingresso: ingresso, status: 0});
+                }).catch(function(err){
+                    req.flash('error_msg', 'Ingresso Inválido')
+                    res.redirect('/admin')
+                })
+            }
         }
+
     }
 
     listar = async function(req, res){
